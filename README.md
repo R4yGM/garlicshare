@@ -26,7 +26,9 @@ Global Flags:
 ```
 
 <p align="center">
-<a href="https://asciinema.org/a/ClDciL9eGmMw79CU5yxi94vFJ" target="_blank"><img src="https://asciinema.org/a/ClDciL9eGmMw79CU5yxi94vFJ.svg" /></a>
+  <a href="https://asciinema.org/a/459863">
+    <img src="./asciicast.svg" alt="asciicast" width="700">
+  </a>
 </p>
 
 webpage :
@@ -49,7 +51,7 @@ garlicshare can be installed in different ways:
 
 ## **Go Packages**
 
-<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Go_Logo_Blue.svg/1200px-Go_Logo_Blue.svg.png" width=95 height=35>
+<img src="https://go.dev/blog/go-brand/Go-Logo/PNG/Go-Logo_Blue.png" width=60 height=55>
 
  throught [Golang Packages](https://go.dev/) (golang package manager)
  
@@ -60,7 +62,7 @@ go get github.com/R4yGM/garlicshare
 
 ## **Docker**
 
-<img src="https://cdn3.iconfinder.com/data/icons/logos-and-brands-adobe/512/97_Docker-512.png" width=35 height=35>
+<img src="https://cdn3.iconfinder.com/data/icons/logos-and-brands-adobe/512/97_Docker-512.png" width=60 height=55>
 
   if you don't have docker installed you can follow their [guide](https://docs.docker.com/engine/install/)
   
