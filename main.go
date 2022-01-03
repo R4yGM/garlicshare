@@ -17,6 +17,7 @@ package main
 
 import "github.com/R4yGM/GarlicShare/cmd"
 
+
 func main() {
 	cmd.Execute()
 }

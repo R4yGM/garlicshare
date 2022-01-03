@@ -1,51 +1,216 @@
-/*
-Copyright © 2022 NAME HERE <EMAIL ADDRESS>
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-*/
 package cmd
 
 import (
 	"fmt"
 
 	"github.com/spf13/cobra"
+
+	"path/filepath"
+
+	"context"
+	"log"
+	"net/http"	
+	"time"
+	"github.com/cretz/bine/tor"
+	"github.com/innix/shrek"
+	"html/template"
+	"os"
+	"math/rand"
+    "strings"
+	"strconv"
+	gs "github.com/R4yGM/GarlicShare/size"
 )
 
-// uploadCmd represents the upload command
+
+
+var (
+	key string
+	path string
+)
+
 var uploadCmd = &cobra.Command{
 	Use:   "upload",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Short: "Creates an .onion link where you can download a file or directory ",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("upload called")
+		Upload();
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(uploadCmd)
 
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// uploadCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// uploadCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	uploadCmd.PersistentFlags().StringVarP(&key, "key", "k", "", "Password to download the files")
+	uploadCmd.PersistentFlags().StringVarP(&path, "path", "p", "", "Path")
+	uploadCmd.MarkPersistentFlagRequired("path")
 }
+
+
+func Upload(){
+	if _, err := os.Stat(path); os.IsNotExist(err) {
+		log.Panicf("Path '%s' does not exist", path)
+	}
+	dt := time.Now()
+	fmt.Printf(strings.Repeat("=", 60))
+    fmt.Println("\nGarlicShare starting",dt.Format("01-02-2006 15:04:05"))
+	fmt.Println("Starting and registering onion service, please wait a couple of minutes...")
+	t, err := tor.Start(nil, nil)
+	if err != nil {
+		log.Panicf("Unable to start Tor: %v", err)
+	}
+	defer t.Close()
+
+	listenCtx, listenCancel := context.WithTimeout(context.Background(), 3*time.Minute)
+	defer listenCancel()
+
+
+	addr, err := shrek.MineOnionHostName(context.Background(), nil, shrek.StartEndMatcher{
+		Start: []byte("gar"),
+	})
+
+	if err != nil {
+		panic(err)
+	}
+	onion, err := t.Listen(listenCtx, &tor.ListenConf{Version3: true, Key: addr.SecretKey, RemotePorts: []int{80}})
+
+
+	if err != nil {
+		log.Panicf("Unable to create onion service: %v", err)
+	}
+	defer onion.Close()
+	fmt.Printf("Open Tor browser and navigate to http://%v.onion\n", onion.ID)
+
+	errCh := make(chan error, 1)
+
+
+	http.Handle("/upload", http.FileServer(http.Dir(".")))
+
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		vars := make(map[string]interface{})
+		
+
+		info, err := os.Stat(path)
+		if err != nil {
+			panic(err)
+		}
+
+		if info.IsDir() {
+			if(path[len(path)-1:] == "/"){
+				vars["FileName"] = template.HTML(`<i class="fas fa-folder" style="margin-right:20px"></i>`+filepath.Base(path))
+			}else{
+				vars["FileName"] = template.HTML(`<i class="fas fa-folder" style="margin-right:20px"></i>`+filepath.Base(path)+"/")
+			}
+			
+		}else{
+			vars["FileName"] = template.HTML(`<i class="fas fa-file" style="margin-right:20px"></i>`+filepath.Base(path))
+		}
+
+		vars["FileSize"] = gs.HumanFileSize(float64(info.Size()))
+
+		if(key != ""){
+			vars["PasswordForm"] = template.HTML(`
+						<div class="" style="margin:auto;width:30%">
+							<div class="mb-6">
+							<label class="block text-gray-700 text-sm font-bold mb-2" style="color:white" for="password">
+								Key
+							</label>
+							<input onKeyDown="if(event.keyCode==13) download()"class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" id="password" type="password" placeholder="******************">
+							</div>
+						<p class="text-center text-gray-500 text-s">
+							This file is protected by a password, insert the password and download the file
+						</p>
+						</div>`)
+		}else{
+			vars["PasswordForm"] = "";
+		}
+
+		tmpl := template.Must(template.ParseFiles("static/index.html"))
+		tmpl.Execute(w, vars)
+	})
+
+
+	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./static"))))
+
+
+	fileInfo, err := os.Stat(path)
+	if err != nil {
+		panic(err)
+	}
+
+	rand.Seed(time.Now().UnixNano())
+	chars := []rune("ABCDEFGHIJKLMNOPQRSTUVWXYZ" +
+		"abcdefghijklmnopqrstuvwxyz" +
+		"0123456789")
+	var b strings.Builder
+	for i := 0; i < 30; i++ {
+		b.WriteRune(chars[rand.Intn(len(chars))])
+	}
+	str := b.String() 
+
+	if fileInfo.IsDir() {
+		http.Handle("/download/"+str+"/", http.StripPrefix("/download/"+str+"/", http.FileServer(http.Dir(path))))
+	}
+
+	http.HandleFunc("/download", func(w http.ResponseWriter, r *http.Request) {
+		if(key != ""){	
+			param, ok := r.URL.Query()["Key"]
+			if !ok || len(param[0]) < 1 {
+				fmt.Fprintf(w, "Key parameter is missing!")
+				return
+			}
+			defer r.Body.Close()
+			
+			if(key == param[0]){
+				fileInfo, err := os.Stat(path)
+				if err != nil {
+					// error handling
+				}
+				if fileInfo.IsDir() {
+					http.Redirect(w, r, "/download/"+str, http.StatusSeeOther)
+				} else {
+						w.Header().Set("Content-Disposition", "attachment; filename="+path)
+						w.Header().Set("Content-Type", "application/octet-stream")
+						fi, err := os.Stat(path)
+						if err != nil {
+						}
+						w.Header().Set("Content-Lenght", strconv.FormatInt(int64(fi.Size()), 10))
+						http.ServeFile(w, r, path)
+				}
+			}else{
+				fmt.Fprintf(w, "Wrong Key!")
+			}
+		}else{
+			fileInfo, err := os.Stat(path)
+			if err != nil {
+				// error handling
+			}
+			if fileInfo.IsDir() {
+				http.Redirect(w, r, "/download/"+str, http.StatusSeeOther)
+			} else {
+				w.Header().Set("Content-Disposition", "attachment; filename="+path)
+				w.Header().Set("Content-Type", "application/octet-stream")
+				fi, err := os.Stat(path)
+				if err != nil {
+				}
+				w.Header().Set("Content-Lenght", strconv.FormatInt(int64(fi.Size()), 10))
+				http.ServeFile(w, r, path)
+			}
+		}
+	})
+
+	if err != nil {
+		panic(err)
+	}
+
+
+	http.Serve(onion, nil)
+	// End when enter is pressed
+	go func() {
+		fmt.Scanln()
+		errCh <- nil
+	}()
+	if err = <-errCh; err != nil {
+		log.Panicf("Failed serving: %v", err)
+	}
+}
+
+
