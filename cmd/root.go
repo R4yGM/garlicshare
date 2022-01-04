@@ -11,7 +11,7 @@ import (
 var cfgFile string
 
 var rootCmd = &cobra.Command{
-	Use:   "GarlicShare",
+	Use:   "garlicshare",
 	Short: "Secure and private file sharing over the Tor network",
 }
 
