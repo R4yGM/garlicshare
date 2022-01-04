@@ -24,11 +24,11 @@ Global Flags:
 <p align="center">
 <a href="https://asciinema.org/a/ClDciL9eGmMw79CU5yxi94vFJ" target="_blank"><img src="https://asciinema.org/a/ClDciL9eGmMw79CU5yxi94vFJ.svg" /></a>
 </p>
-if  you visist the .onion link you will see this :
+webpage :
 
 ![](https://i.imgur.com/szj31H6.png)
 
-webpage with files protected with a password
+webpage protected with a key :
 
 ![](https://i.imgur.com/1k0YXYa.png)
 
