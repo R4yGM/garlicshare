@@ -18,7 +18,7 @@ import (
 	"math/rand"
     "strings"
 	"strconv"
-	gs "github.com/R4yGM/GarlicShare/size"
+	gs "github.com/R4yGM/garlicshare/size"
 )
 
 
