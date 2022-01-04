@@ -1,8 +1,10 @@
-# garlicshare
-
 <p align="center">
   <img src="https://i.imgur.com/7jifuFY.png" width=100 height=100 >
 </p>
+
+# garlicshare
+
+garlicshare is an open source tool that lets you securely and anonymously share files on a hosted onion service using the Tor network.
 
 # Usage
 
