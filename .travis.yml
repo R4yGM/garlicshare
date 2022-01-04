@@ -1,0 +1,10 @@
+language: go
+
+services:
+  - docker
+  
+install:
+  - docker pull r4yan/garlicshare
+
+script:
+  - docker run r4yan/garlicshare -h
