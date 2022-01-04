@@ -1,4 +1,4 @@
-module github.com/R4yGM/GarlicShare
+module github.com/R4yGM/garlicshare
 
 go 1.16
 
