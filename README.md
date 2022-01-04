@@ -1,3 +1,5 @@
+![](https://api.travis-ci.com/R4yGM/GarlicShare.svg)
+
 <p align="center">
   <img src="https://i.imgur.com/7jifuFY.png" width=100 height=100 >
 </p>
@@ -12,7 +14,7 @@ garlicshare is very simple to use, you can view the program help with the -h or 
 
 ```bash
 Usage:
-  GarlicShare upload [flags]
+  garlicshare upload [flags]
 
 Flags:
   -h, --help          help for upload
@@ -26,6 +28,7 @@ Global Flags:
 <p align="center">
 <a href="https://asciinema.org/a/ClDciL9eGmMw79CU5yxi94vFJ" target="_blank"><img src="https://asciinema.org/a/ClDciL9eGmMw79CU5yxi94vFJ.svg" /></a>
 </p>
+
 webpage :
 
 ![](https://i.imgur.com/szj31H6.png)
