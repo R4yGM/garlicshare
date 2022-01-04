@@ -4,6 +4,36 @@
   <img src="https://i.imgur.com/7jifuFY.png" width=100 height=100 >
 </p>
 
+# Usage
+
+garlicshare is very simple to use, you can view the program help with the -h or --help option
+
+```bash
+Usage:
+  GarlicShare upload [flags]
+
+Flags:
+  -h, --help          help for upload
+  -k, --key string    Password to download the files
+  -p, --path string   Path
+
+Global Flags:
+      --config string   config file (default is $HOME/.GarlicShare.yaml)
+```
+
+<p align="center">
+<a href="https://asciinema.org/a/ClDciL9eGmMw79CU5yxi94vFJ" target="_blank"><img src="https://asciinema.org/a/ClDciL9eGmMw79CU5yxi94vFJ.svg" /></a>
+</p>
+if  you visist the .onion link you will see this :
+
+![](https://i.imgur.com/szj31H6.png)
+
+webpage with files protected with a password
+
+![](https://i.imgur.com/1k0YXYa.png)
+
+
+
 # Dependencies
 garlicshare requires at least Tor >= 0.3.5
 
@@ -58,33 +88,3 @@ docker run -v garlicshare_files:/garlicshare r4yan/garlicshare upload -p garlics
   **the path must be the same as the volume binding path! [read more here](https://docs.docker.com/storage/bind-mounts/#choose-the--v-or---mount-flag)**
   
   **this will work for every platform**
-
-# Usage
-
-garlicshare is very simple to use, you can view the program help with the -h or --help option
-
-```bash
-Usage:
-  GarlicShare upload [flags]
-
-Flags:
-  -h, --help          help for upload
-  -k, --key string    Password to download the files
-  -p, --path string   Path
-
-Global Flags:
-      --config string   config file (default is $HOME/.GarlicShare.yaml)
-```
-
-<p align="center">
-<a href="https://asciinema.org/a/ClDciL9eGmMw79CU5yxi94vFJ" target="_blank"><img src="https://asciinema.org/a/ClDciL9eGmMw79CU5yxi94vFJ.svg" /></a>
-</p>
-if  you visist the .onion link you will see this :
-
-![](https://i.imgur.com/szj31H6.png)
-
-webpage with files protected with a password
-
-![](https://i.imgur.com/1k0YXYa.png)
-
-
