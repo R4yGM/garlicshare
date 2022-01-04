@@ -77,5 +77,7 @@ Global Flags:
 ```
 
 <p align="center">
-<a href="https://asciinema.org/a/5YUpQhY76MQE6vXDIVNNyK9T7" target="_blank"><img src="https://asciinema.org/a/5YUpQhY76MQE6vXDIVNNyK9T7.svg" /></a>
+<a href="https://asciinema.org/a/ClDciL9eGmMw79CU5yxi94vFJ" target="_blank"><img src="https://asciinema.org/a/ClDciL9eGmMw79CU5yxi94vFJ.svg" /></a>
 </p>
+if  you visist the .onion link you will see this :
+![](https://i.imgur.com/szj31H6.png)
