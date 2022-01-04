@@ -15,8 +15,9 @@ limitations under the License.
 */
 package main
 
-import "github.com/R4yGM/garlicshare/cmd"
-
+import (
+	"github.com/R4yGM/garlicshare/cmd"
+)
 
 func main() {
 	cmd.Execute()
