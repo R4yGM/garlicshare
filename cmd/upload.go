@@ -17,7 +17,6 @@ import (
 	"os"
 	"math/rand"
     "strings"
-	"strconv"
 	gs "github.com/R4yGM/garlicshare/size"
 )
 
@@ -364,10 +363,6 @@ func Upload(){
 				} else {
 						w.Header().Set("Content-Disposition", "attachment; filename="+path)
 						w.Header().Set("Content-Type", "application/octet-stream")
-						fi, err := os.Stat(path)
-						if err != nil {
-						}
-						w.Header().Set("Content-Lenght", strconv.FormatInt(int64(fi.Size()), 10))
 						http.ServeFile(w, r, path)
 				}
 			}else{
@@ -383,10 +378,6 @@ func Upload(){
 			} else {
 				w.Header().Set("Content-Disposition", "attachment; filename="+path)
 				w.Header().Set("Content-Type", "application/octet-stream")
-				fi, err := os.Stat(path)
-				if err != nil {
-				}
-				w.Header().Set("Content-Lenght", strconv.FormatInt(int64(fi.Size()), 10))
 				http.ServeFile(w, r, path)
 			}
 		}
