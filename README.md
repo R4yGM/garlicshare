@@ -26,7 +26,7 @@ Global Flags:
 ```
 
 <p align="center">
-<a href="https://asciinema.org/a/ClDciL9eGmMw79CU5yxi94vFJ" target="_blank"><img src="https://asciinema.org/a/ClDciL9eGmMw79CU5yxi94vFJ.svg" /></a>
+<a href="https://asciinema.org/a/459863" target="_blank"><img src="https://asciinema.org/a/459863.svg" /></a>
 </p>
 
 webpage :
